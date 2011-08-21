@@ -1,4 +1,5 @@
 # ignore ace file (downloaded by the use for installation) #
 ############################################################
-ace-*
+ace*
 __MACOSX
+node_modules
