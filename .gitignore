@@ -1,0 +1,4 @@
+# ignore ace file (downloaded by the use for installation) #
+############################################################
+ace-*
+__MACOSX
