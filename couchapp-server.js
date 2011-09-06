@@ -9,6 +9,7 @@ var http = require('http')
 ;
 
 function getServerDesign(uri){
+	debugger;
 	if(uri.lenght == 0 || uri == '/') uri = 'localhost';
 	if(uri[0] == '/') uri = uri.substring(1);
 	var paths = uri.split(pathSplitRegex);
@@ -26,7 +27,6 @@ function getServerDesign(uri){
 		}
 	}
 	server.srv = couchClient.srv(host, port);
-	debugger;
 	if(paths.length > 1 && paths[1].length > 0) server.database = server.srv.db(paths[1]);
 	if(paths.length > 2 && paths[2].length > 0) server.design = server.database.designDoc(paths[2]);
 	return server;
@@ -34,11 +34,12 @@ function getServerDesign(uri){
 
 http.createServer(function(request, response){
 	var server = getServerDesign(url.parse(request.url).pathname);
-	// debugger;
+	debugger;
 	response.write('server=' + server.srv.urlObj.hostname + ":" + server.srv.urlObj.port + '\n');
 	// response.write(JSON.stringify(server) + '\n');
 	if(server.srv){
 		server.srv.allDbs(function(err, allDbs){
+			debugger;
 			var dbs = [];
 			for(dbId in allDbs){
 				var db = allDbs[dbId];
@@ -47,9 +48,9 @@ http.createServer(function(request, response){
 				}
 			}
 			response.write('allDbs=' + JSON.stringify(dbs) + '\n');
-			debugger;
-			if(server.database && server.database.length > 0){
+			if(server.database){
 				server.database.allDocs(function(err, allDocs){
+					debugger;
 					if(err){
 						console.log(err);
 						response.end();
@@ -66,11 +67,18 @@ http.createServer(function(request, response){
 							response.write('allDesigns=' + JSON.stringify(designs) + '\n');
 							if(server.design){
 								server.design.get(function(err, body){
+									debugger;
 									//response.write(JSON.stringify(body) + '\n');
 									response.write(JSON.stringify(server.design.body) + '\n');
 									response.end();
 								})
 							}
+							else{
+								response.end();
+							}
+						}
+						else{
+							response.end();
 						}
 					}
 				})
