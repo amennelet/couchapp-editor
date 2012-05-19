@@ -30,3 +30,5 @@ This is a [nodejs](http://nodejs.org) web server to edit [couchdb](http://couchd
 7. Start the server (not yet working...)
 
         ./couchapp-server.js
+
+c'est pour voir
